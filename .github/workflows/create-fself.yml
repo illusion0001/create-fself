@@ -2,9 +2,9 @@ name: Go
 
 on:
   push:
-    branches: [ master ]
+    # branches: [ master ]
   pull_request:
-    branches: [ master ]
+    # branches: [ master ]
 
 jobs:
 
@@ -12,19 +12,16 @@ jobs:
     name: create-fself
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Set up Go
-      uses: actions/setup-go@v2
+      uses: actions/setup-go@v3
       with:
         go-version: 1.17
     
-    - name: Setup build directory
-      run: |
-        mkdir build
-
     - name: Build windows version
       run: |
+        mkdir build
         cd cmd/create-fself
         GOOS=windows go build -o ../../build/create-fself.exe -modfile=go-linux.mod
 
@@ -38,6 +35,9 @@ jobs:
         cd cmd/create-fself
         GOOS=darwin go build -o ../../build/create-fself-macos -modfile=go-linux.mod
 
+    - name: Create tarball
+      run: tar -czvf binaries.tar.gz build/*
+    
     - name: Upload windows version
       uses: actions/upload-artifact@v2
       with:
@@ -55,3 +55,9 @@ jobs:
       with:
         name: create-fself-macos
         path: build/create-fself-macos
+
+    - name: Upload tarball
+      uses: actions/upload-artifact@v2
+      with:
+        name: binaries.tar.gz
+        path: binaries.tar.gz
