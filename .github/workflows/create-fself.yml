@@ -32,25 +32,25 @@ jobs:
       run: tar -czvf binaries.tar.gz build/*
     
     - name: Upload windows version
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: create-fself.exe
         path: build/create-fself.exe
 
     - name: Upload linux version
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: create-fself
         path: build/create-fself
 
     - name: Upload macOS version
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: create-fself-macos
         path: build/create-fself-macos
 
     - name: Upload tarball
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: binaries.tar.gz
         path: binaries.tar.gz
