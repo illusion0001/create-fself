@@ -13,41 +13,39 @@ jobs:
       uses: actions/setup-go@v3
 
     - name: Build windows version
+      working-directory: cmd/create-fself
       run: |
-        mkdir build
-        cd cmd/create-fself
-        GOOS=windows go build -o ../../build/create-fself.exe -modfile=go-linux.mod
+        mkdir ../../bin
+        GOOS=windows go build -o ../../bin/create-fself.exe -modfile=go-linux.mod
 
     - name: Build linux version
-      run: |
-        cd cmd/create-fself
-        go build -o ../../build/create-fself -modfile=go-linux.mod
-        
+      working-directory: cmd/create-fself
+      run: go build -o ../../bin/create-fself -modfile=go-linux.mod
+
     - name: Build macOS version
-      run: |
-        cd cmd/create-fself
-        GOOS=darwin go build -o ../../build/create-fself-macos -modfile=go-linux.mod
+      working-directory: cmd/create-fself
+      run: GOOS=darwin go build -o ../../bin/create-fself-macos -modfile=go-linux.mod
 
     - name: Create tarball
-      run: tar -czvf binaries.tar.gz build/*
-    
+      run: tar -czvf binaries.tar.gz bin/*
+
     - name: Upload windows version
       uses: actions/upload-artifact@v3
       with:
         name: create-fself.exe
-        path: build/create-fself.exe
+        path: bin/create-fself.exe
 
     - name: Upload linux version
       uses: actions/upload-artifact@v3
       with:
         name: create-fself
-        path: build/create-fself
+        path: bin/create-fself
 
     - name: Upload macOS version
       uses: actions/upload-artifact@v3
       with:
         name: create-fself-macos
-        path: build/create-fself-macos
+        path: bin/create-fself-macos
 
     - name: Upload tarball
       uses: actions/upload-artifact@v3
