@@ -1,5 +1,5 @@
 # Tool Documentation (create-fself)
-[![Build](https://img.shields.io/github/workflow/status/openorbis/create-fself/Go)]()
+[![Go](https://github.com/OpenOrbis/create-fself/actions/workflows/create-fself.yml/badge.svg)](https://github.com/OpenOrbis/create-fself/actions/workflows/create-fself.yml)
 [![Release](https://img.shields.io/github/v/release/openorbis/create-fself)](https://github.com/OpenOrbis/create-fself/releases/latest)
 [![Commits since release](https://img.shields.io/github/commits-since/openorbis/create-fself/latest)]()
 [![Commits since nightly](https://img.shields.io/github/commits-since/openorbis/create-fself/latest?include_prereleases)]()
@@ -61,98 +61,98 @@ Usage of create-fself:
 
 ## Architecture
 
-**cmd/create-fself/**
+**`cmd/create-fself/`**
 - Tool main application code.
 
-**pkg/oelf/**
+**`pkg/oelf/`**
 - Everything related to parsing and building Orbis ELFs (OELFs). These OELFs are not the final product, but an intermediate
 between regular PC ELFs and the final fSELF the PS4 uses.
 
-**pkg/fself/**
+**`pkg/fself/`**
 - Everything related to parsing and building fSELFs. Most of this code is thanks to flatz' original python script.
 
-**scripts/**
+**`scripts/`**
 - Build scripts for windows and linux.
 
-**Makefile**
+**`Makefile`**
 - Makefile for building on linux.
 
 ***
 
 ## Utility functions
-A list of the helper functions provided in Utils.go is provided below for convenience.
+A list of the helper functions provided in `Utils.go` is provided below for convenience.
 
-#### func (*OrbisElf) getFileOffsetBySectionName(string) (int64, error)
+#### `func (*OrbisElf) getFileOffsetBySectionName(string) (int64, error)`
 ```golang
 func (orbisElf *OrbisElf) getFileOffsetBySectionName(name string) (int64, error)
 ```
-OrbisElf.getFileOffsetsBySectionName searches the section header table of the input ELF with the given name and returns that section's offset as well as error. If the section name does not exist, an offset of 0 and an error is returned. The offset and nil are returned otherwise.
+`OrbisElf.getFileOffsetsBySectionName` searches the section header table of the input ELF with the given name and returns that section's offset as well as error. If the section name does not exist, an offset of 0 and an error is returned. The offset and nil are returned otherwise.
 
-#### func (*OrbisElf) getDynamicTag(elf.DynTag) (uint64, error)
+#### `func (*OrbisElf) getDynamicTag(elf.DynTag) (uint64, error)`
 ```golang
 func (orbisElf *OrbisElf) getDynamicTag(tag elf.DynTag) (uint64, error)
 ```
-OrbisElf.getDynamicTag searches the dynamic table of the input ELF with the given tag and returns that tag's value as well as error. If the tag does not exist, or if the dynamic table cannot be found, a value of 0 and an error is returned. The value and nil are returned otherwise.
+`OrbisElf.getDynamicTag` searches the dynamic table of the input ELF with the given tag and returns that tag's value as well as error. If the tag does not exist, or if the dynamic table cannot be found, a value of 0 and an error is returned. The value and nil are returned otherwise.
 
-#### func (*OrbisElf) getSymbol(string) elf.Symbol
+#### `func (*OrbisElf) getSymbol(string) elf.Symbol`
 ```golang
 func (orbisElf *OrbisElf) getSymbol(name string) elf.Symbol
 ```
-OrbisElf.getSymbol searches the symbol table of the input ELF with the given name and returns the corresponding elf.Symbol object. If the symbol does not exist, an empty elf.Symbol object is returned.
+`OrbisElf.getSymbol` searches the symbol table of the input ELF with the given name and returns the corresponding elf.Symbol object. If the symbol does not exist, an empty elf.Symbol object is returned.
 
-#### func (*OrbisElf) getProgramHeader(elf.ProgType, elf.ProgFlag) *elf.Prog
+#### `func (*OrbisElf) getProgramHeader(elf.ProgType, elf.ProgFlag) *elf.Prog`
 ```golang
 func (orbisElf *OrbisElf) getProgramHeader(headerType elf.ProgType, headerFlags elf.ProgFlag) *elf.Prog
 ```
-OrbisElf.getProgramHeader searches the program header table of the input ELF with the given type and flags, and returns a pointer to that program header if it's found. If it cannot be found, a nil pointer is returned.
+`OrbisElf.getProgramHeader` searches the program header table of the input ELF with the given type and flags, and returns a pointer to that program header if it's found. If it cannot be found, a nil pointer is returned.
 
-#### func checkIfLibraryContainsSymbol(*elf.File, string) (bool, error)
+#### `func checkIfLibraryContainsSymbol(*elf.File, string) (bool, error)`
 ```golang
 func checkIfLibraryContainsSymbol(library *elf.File, symbolName string) (bool, error)
 ```
-checkIfLibraryContainsSymbol takes a given library and symbol name, and checks if the library contains that symbol. It returns a boolean of whether or not that library contains that symbol, as well as error. If we cannot get a libraries symbol list, false and an error is returned. Otherwise, the true or false and nil are returned.
+`checkIfLibraryContainsSymbol` takes a given library and symbol name, and checks if the library contains that symbol. It returns a boolean of whether or not that library contains that symbol, as well as error. If we cannot get a libraries symbol list, false and an error is returned. Otherwise, the true or false and nil are returned.
 
-#### func intToByteArray(int) []byte
+#### `func intToByteArray(int) []byte`
 ```golang
 func intToByteArray(value int) []byte
 ```
-intToByteArray takes a given integer and writes it into a byte array (little endian) and returns it.
+`intToByteArray` takes a given integer and writes it into a byte array (little endian) and returns it.
 
-#### func writeNullBytes(uint64, uint64, *[]byte) uint64
+#### `func writeNullBytes(uint64, uint64, *[]byte) uint64`
 ```golang
 func writeNullBytes(size uint64, align uint64, buffer *[]byte) uint64
 ```
-writeNullBytes takes a given size and alignment, and uses that to write null padding to buffer. Returns the number of null bytes written.
+`writeNullBytes` takes a given size and alignment, and uses that to write null padding to buffer. Returns the number of null bytes written.
 
-#### func contains([]string, string) bool
+#### `func contains([]string, string) bool`
 ```golang
 func contains(slice []string, element string) bool
 ```
-contains takes a given slice and element, and checks if the element is present within the slice. Returns true if it is present, false otherwise.
+`contains` takes a given slice and element, and checks if the element is present within the slice. Returns true if it is present, false otherwise.
 
-#### func NewOrderedMap() *OrderedMap
+#### `func NewOrderedMap() *OrderedMap`
 ```golang
 func NewOrderedMap() *OrderedMap
 ```
-NewOrderedMap creates a new OrderedMap structure and returns it.
+`NewOrderedMap` creates a new OrderedMap structure and returns it.
 
-#### func (*OrderedMap) Get(interface{}) interface{}
+#### `func (*OrderedMap) Get(interface{}) interface{}`
 ```golang
 func (orderedMap *OrderedMap) Get(key interface{}) interface{}
 ```
-OrderedMap.Get uses a given key to return the corresponding mapping.
+`OrderedMap.Get` uses a given key to return the corresponding mapping.
 
-#### func (*OrderedMap) Set(interface{}, interface{})
+#### `func (*OrderedMap) Set(interface{}, interface{})`
 ```golang
 func (orderedMap *OrderedMap) Set(key interface{}, value interface{})
 ```
-OrderedMap.Set uses a given key to set that key's mapping to a given value.
+`OrderedMap.Set` uses a given key to set that key's mapping to a given value.
 
-#### func (*OrderedMap) Keys() []interface{}
+#### `func (*OrderedMap) Keys() []interface{}`
 ```golang
 func (orderedMap *OrderedMap) Keys() []interface{}
 ```
-OrderedMap.Keys returns the current list of keys for the OrderedMap.
+`OrderedMap.Keys` returns the current list of keys for the OrderedMap.
 
 ## Maintainers + Thanks
 - Specter: Lead maintainer
